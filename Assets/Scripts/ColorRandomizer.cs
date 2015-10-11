@@ -23,9 +23,4 @@ public class ColorRandomizer : MonoBehaviour {
         theMaterial.color =  new Color(red, green, blue);
         gameObject.GetComponent<Renderer>().material = theMaterial;
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

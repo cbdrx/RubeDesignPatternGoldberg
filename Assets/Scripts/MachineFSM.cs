@@ -9,7 +9,9 @@ using System.Collections;
 public enum rubeState
 {
     init = 0,
-
+    dominoStart,
+    
+    
 
 }
 
@@ -17,7 +19,7 @@ public class MachineFSM : MonoBehaviour {
     
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
