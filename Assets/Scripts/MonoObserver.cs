@@ -5,18 +5,23 @@ using System.Collections;
 /// MonoObserver is a monobehavior that allows an object to receive messages
 /// from the MachineManager. 
 /// </summary>
-public class MonoObserver : MonoBehaviour {
+public abstract class MonoObserver : MonoBehaviour {
 
-    private MachineManager manager = MachineManager.getManager();
-
+    protected MachineManager manager;              
+    protected rubeState currentState;
 
     // Use this for initialization
-	void Start () {
-	
+	protected void Start () 
+    {
+        manager = MachineManager.Instance;
+        manager.subscribe(this);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    protected void OnDestroy()
+    {
+        manager.unsubscribe((MonoObserver)this);
+    }
+
+    public abstract void receiveUpdate(rubeState theState);
+
 }

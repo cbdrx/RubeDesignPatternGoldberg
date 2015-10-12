@@ -4,30 +4,54 @@ using System.Collections.Generic;
 
 public class MachineManager : MonoBehaviour {
 
-    private static MachineManager theMachineManager;
     private List<MonoObserver> subscribers = new List<MonoObserver>();
     private MachineFSM theFSM;
 
-    private MachineManager()
+    public static MachineManager Instance
     {
-        
+        get { return instance; }
+        set
+        {
+            if (instance == null || instance == value)
+            {
+                instance = value;
+            }
+            else
+            {
+                Destroy(value.gameObject);
+            }
+        }
+    }
+    private static MachineManager instance;
+
+    private void Awake()
+    {
+        instance = this;
+        theFSM = gameObject.GetComponent<MachineFSM>();
     }
 
-    public static MachineManager getManager()
+    public void subscribe(MonoObserver obs)
     {
-        if(theMachineManager == null)
-            theMachineManager = new MachineManager();
-        return theMachineManager;
+        subscribers.Add(obs);
     }
 
-    public void subscribe(MonoObserver o)
+    public void unsubscribe(MonoObserver obs)
     {
-        subscribers.Add(o);
+        subscribers.Remove(obs);
     }
 
-    public void unsubscribe(MonoObserver o)
+    public void updateSubs()
     {
-        subscribers.Remove(o);
+        foreach(MonoObserver subscriber in subscribers)
+        {
+            subscriber.receiveUpdate(theFSM.getState());
+        }
+    }
+
+    public void receiveControl(triggerList message)
+    {
+        theFSM.handleTrigger(message);
+        updateSubs();
     }
     
 }
