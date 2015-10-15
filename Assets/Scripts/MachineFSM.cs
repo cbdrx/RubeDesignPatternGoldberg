@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 /// <summary>
@@ -10,6 +11,8 @@ public enum rubeState
 {
     init = 0,
     dominoStart,
+    catapultFired,
+
     
 }
 
@@ -17,17 +20,25 @@ public enum triggerList
 {
     started = 0,
     ballFell,
+    catapultStart,
 
 }
 
 public class MachineFSM : MonoBehaviour {
 
-    private rubeState currentState;
+    
+    private IState currentState;
+    private Dictionary<rubeState, IState> stateList =
+        new Dictionary<rubeState, IState>();
 
 	// Use this for initialization
 	void Start () 
     {
-        currentState = rubeState.init;
+        stateList.Add(rubeState.init, new InitState());
+        stateList.Add(rubeState.dominoStart, new DominoState());
+        stateList.Add(rubeState.catapultFired, new CatapultState());
+        
+        currentState = stateList[rubeState.init];
 
 	}
 	
@@ -39,30 +50,74 @@ public class MachineFSM : MonoBehaviour {
 
     public rubeState getState()
     {
-        return currentState;
+        return currentState.toEnum();
     }
 
     public void handleTrigger(triggerList message)
     {
-        switch (currentState)
+        currentState = stateList[currentState.transition(message)];
+    }
+    
+    private interface IState
+    {
+        rubeState toEnum();
+
+        rubeState transition(triggerList message);
+    }
+
+    private class InitState : IState
+    {
+        public rubeState toEnum()
         {
-            case (rubeState.init):
+            return rubeState.init;
+        }
+
+        public rubeState transition(triggerList message)
+        {
+            if(message == triggerList.ballFell)
             {
-                switch(message)
-                {
-                    case triggerList.started:
-                    {
-                        break;
-                    }
-                    case triggerList.ballFell:
-                    {
-                        currentState = rubeState.dominoStart;
-                        break;
-                    }
-                }
-                break;
+                return rubeState.dominoStart;
             }
-            
+
+            return rubeState.init;
         }
     }
+
+    private class DominoState : IState
+    {
+        public rubeState toEnum()
+        {
+            return rubeState.dominoStart;
+        }
+
+        public rubeState transition(triggerList message)
+        {
+            if (message == triggerList.catapultStart)
+            {
+                return rubeState.catapultFired;
+            }
+
+            return rubeState.dominoStart;
+        }
+    }
+
+    private class CatapultState : IState
+    {
+        public rubeState toEnum()
+        {
+            return rubeState.catapultFired;
+        }
+
+        public rubeState transition(triggerList message)
+        {
+            if (message == triggerList.catapultStart)
+            {
+                return rubeState.catapultFired;
+            }
+
+            return rubeState.catapultFired;
+        }
+    }
+
 }
+
