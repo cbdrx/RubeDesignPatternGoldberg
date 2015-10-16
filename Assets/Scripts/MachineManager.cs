@@ -32,6 +32,7 @@ public class MachineManager : MonoBehaviour {
 
     public void subscribe(MonoObserver obs)
     {
+        obs.receiveUpdate(theFSM.getState());
         subscribers.Add(obs);
     }
 

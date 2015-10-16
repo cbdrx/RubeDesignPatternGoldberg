@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// This class implements the MonoObserver class for the catapult
+/// </summary>
 public class CatapultObserver : MonoObserver {
 
 	// Use this for initialization
-    public override void receiveUpdate(rubeState theState)
+    public override void receiveUpdate(rubeState theState) { }
+    void Update()
     {
-        if(theState == rubeState.dominoStart)
+        //if(theState == rubeState.catapultFired)
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             gameObject.GetComponent<Rigidbody>().AddForceAtPosition(
-                Vector3.down * 10000, new Vector3(-5, 0, 0));
+                new Vector3(15, -750, 0),
+                transform.position + new Vector3(5,0,0));
+            Debug.Log("Firing!");
         }
     }
 }

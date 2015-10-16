@@ -32,11 +32,11 @@ public class MachineFSM : MonoBehaviour {
         new Dictionary<rubeState, IState>();
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
     {
         stateList.Add(rubeState.init, new InitState());
         stateList.Add(rubeState.dominoStart, new DominoState());
-        stateList.Add(rubeState.catapultFired, new CatapultState());
+        stateList.Add(rubeState.catapultFired, new CatapultFired());
         
         currentState = stateList[rubeState.init];
 
@@ -45,7 +45,7 @@ public class MachineFSM : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-	
+        Debug.Log("Current State: " + currentState.toEnum().ToString());
 	}
 
     public rubeState getState()
@@ -101,7 +101,7 @@ public class MachineFSM : MonoBehaviour {
         }
     }
 
-    private class CatapultState : IState
+    private class CatapultFired : IState
     {
         public rubeState toEnum()
         {
