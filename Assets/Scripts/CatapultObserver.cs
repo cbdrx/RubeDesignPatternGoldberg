@@ -7,11 +7,9 @@ using System.Collections;
 public class CatapultObserver : MonoObserver {
 
 	// Use this for initialization
-    public override void receiveUpdate(rubeState theState) { }
-    void Update()
+    public override void receiveUpdate(rubeState theState)
     {
-        //if(theState == rubeState.catapultFired)
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(theState == rubeState.catapultFired)
         {
             gameObject.GetComponent<Rigidbody>().AddForceAtPosition(
                 new Vector3(15, -750, 0),
