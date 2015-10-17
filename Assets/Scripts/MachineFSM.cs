@@ -12,16 +12,23 @@ public enum rubeState
     init = 0,
     dominoStart,
     catapultFired,
-
-    
+    wallDestroyed,
+    buttonPressed,
+    targetDestroyed   
 }
 
+/// <summary>
+/// triggerList enumerates the "inputs" to the FSM, namely, the actions that
+/// can occur that cause the machine to transition.
+/// </summary>
 public enum triggerList
 {
     started = 0,
     ballFell,
     catapultStart,
-
+    wallDestroyed,
+    buttonPressed,
+    targetHit
 }
 
 public class MachineFSM : MonoBehaviour {
@@ -37,6 +44,9 @@ public class MachineFSM : MonoBehaviour {
         stateList.Add(rubeState.init, new InitState());
         stateList.Add(rubeState.dominoStart, new DominoState());
         stateList.Add(rubeState.catapultFired, new CatapultFired());
+        stateList.Add(rubeState.wallDestroyed, new WallDestroyed());
+        stateList.Add(rubeState.buttonPressed, new ButtonPresed());
+        stateList.Add(rubeState.targetDestroyed, new TargetDestroyed());
         
         currentState = stateList[rubeState.init];
 
@@ -110,14 +120,63 @@ public class MachineFSM : MonoBehaviour {
 
         public rubeState transition(triggerList message)
         {
-            if (message == triggerList.catapultStart)
+            if (message == triggerList.wallDestroyed)
             {
-                return rubeState.catapultFired;
+                return rubeState.wallDestroyed;
             }
 
             return rubeState.catapultFired;
         }
     }
 
+    private class WallDestroyed : IState
+    {
+        public rubeState toEnum()
+        {
+            return rubeState.wallDestroyed;
+        }
+        
+        public rubeState transition(triggerList message)
+        {
+            if(message == triggerList.buttonPressed)
+            {
+                return rubeState.buttonPressed;
+            }
+
+            return rubeState.wallDestroyed;
+        }
+    }
+
+    public class ButtonPresed : IState
+    {
+        public rubeState toEnum()
+        {
+            return rubeState.buttonPressed;
+        }
+
+        public rubeState transition(triggerList message)
+        {
+            if(message == triggerList.targetHit)
+            {
+                return rubeState.targetDestroyed;
+            }
+
+            return rubeState.buttonPressed;
+        }
+    }
+
+    public class TargetDestroyed : IState
+    {
+        public rubeState toEnum()
+        {
+            return rubeState.targetDestroyed;
+        }
+
+        public rubeState transition(triggerList message)
+        {
+            return this.toEnum();
+        }
+    }
+    
 }
 
