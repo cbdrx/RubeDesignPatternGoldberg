@@ -7,8 +7,7 @@ using System.Collections;
 /// </summary>
 public abstract class MonoObserver : MonoBehaviour {
 
-    protected MachineManager manager;              
-    protected rubeState currentState;
+    protected MachineManager manager;
 
     // Use this for initialization
 	protected void Start () 

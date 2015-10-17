@@ -7,6 +7,7 @@ public class TinyEverythingObserver : MonoObserver {
     {
         if(theState == rubeState.targetDestroyed)
         {
+            gameObject.GetComponent<Rigidbody>().useGravity = true;
             gameObject.GetComponent<Rigidbody>().isKinematic = false;
         }
     }

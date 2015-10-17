@@ -9,7 +9,7 @@ public class RocketObserver : MonoObserver {
         {
             gameObject.GetComponent<Rigidbody>().isKinematic = false;
             gameObject.GetComponent<Rigidbody>().AddForce(
-                transform.up * 750
+                transform.up * 7500
                 );
         }
     }

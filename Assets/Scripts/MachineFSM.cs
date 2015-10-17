@@ -14,6 +14,7 @@ public enum rubeState
     catapultFired,
     wallDestroyed,
     buttonPressed,
+    moveCameraToFinalPos,
     targetDestroyed   
 }
 
@@ -28,6 +29,7 @@ public enum triggerList
     catapultStart,
     wallDestroyed,
     buttonPressed,
+    finalCameraPos,
     targetHit
 }
 
@@ -46,6 +48,7 @@ public class MachineFSM : MonoBehaviour {
         stateList.Add(rubeState.catapultFired, new CatapultFired());
         stateList.Add(rubeState.wallDestroyed, new WallDestroyed());
         stateList.Add(rubeState.buttonPressed, new ButtonPresed());
+        stateList.Add(rubeState.moveCameraToFinalPos, new FinalCameraPos());
         stateList.Add(rubeState.targetDestroyed, new TargetDestroyed());
         
         currentState = stateList[rubeState.init];
@@ -156,12 +159,28 @@ public class MachineFSM : MonoBehaviour {
 
         public rubeState transition(triggerList message)
         {
+            if(message == triggerList.finalCameraPos)
+            {
+                return rubeState.moveCameraToFinalPos;
+            }
+
+            return rubeState.buttonPressed;
+        }
+    }
+    public class FinalCameraPos : IState
+    {
+        public rubeState toEnum()
+        {
+            return rubeState.moveCameraToFinalPos;
+        }
+
+        public rubeState transition(triggerList message)
+        {
             if(message == triggerList.targetHit)
             {
                 return rubeState.targetDestroyed;
             }
-
-            return rubeState.buttonPressed;
+            return this.toEnum();
         }
     }
 
