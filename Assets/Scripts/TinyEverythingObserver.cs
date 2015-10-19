@@ -9,7 +9,7 @@ public class TinyEverythingObserver : MonoObserver {
         {
             gameObject.GetComponent<Rigidbody>().useGravity = true;
             gameObject.GetComponent<Rigidbody>().isKinematic = false;
-            gameObject.GetComponent<Rigidbody>().AddForce(0, 5, 5);
+            gameObject.GetComponent<Rigidbody>().AddForce(0, 20, 20);
         }
     }
 }

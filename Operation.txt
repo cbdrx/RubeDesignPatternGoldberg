@@ -1,0 +1,56 @@
+Christopher A. Boudreaux
+cab5977
+===============================================================================
+Design Pattern Descriptions:
+
+Singleton : The MachineManager class lazily instantiates an object called 
+	"Machine Manager", which has attached monobehaviors of type MachineManager
+	and Machine FSM. These monobehaviors are then cached, and any references to
+	the public property Instance is given a reference to the MachineManager.
+	
+Observer : The MachineManager class acts as the Subject of an observer class.
+	Its job is to notify the different parts of the Rube Goldberg Machine of
+	the current state of the FSM. Classes implementing the abstract class 
+	MonoObserver define the behavior that is required of each object upon a
+	certain transition. On Start, each MonoObserver calls 
+			MonoObserver.subscribe(this);
+	which enables it to receive updates from the MachineManager.
+	
+Finite State Machine : The MachineFSM class implements a finite state machine,
+	whose states are defined as implementations of the IState interface. 
+	Each state contains the valid transitions from itself to other states, so
+	all that is needed is a generic call to
+			IState.transition(triggerList message);
+	which simply returns an enum to the appropriate state, and assigns the
+	the corresponding state to currentState.
+	
+===============================================================================
+Rube Goldberg Segments :
+	Notes : There is a machineTrigger prefab that allows you to select a
+	triggerList enum value, and a target that, when collided with, causes the 
+	machineTrigger to send that triggerList value to the game manager. This is 
+	how the machine knows when to change state.
+	
+	1. The Ball Tower - a red ball rolls down a stack of ramps, eventually 
+		falling to the ground through a machineTrigger. The "Ball Fell" signal
+		is sent to the MachineManager, which transitions to the "dominoStart"
+		state. This disables the "isKinematic" property on The Ball Tower.
+		Physics starts the dominoes falling.
+	2. The Dominoes - a line of dominoes curls around itself and then 
+		increasingly large dominoes fall. The largest domino is The Ball Tower
+		from stage one. When the ball tower falls through a machineTrigger, the
+		"catapultStart" signal is sent to the machineManager, which transitions
+		to the "Catapult Fired" state. This tells the catapult to fire by 
+		applying a force to its lever.
+	3. The Catapult - Physics causes the catapult to launch a projectile towards
+		a breakable wall. The breaking wall then nudges the ball in stage 4 
+		onto a track. the ball passing through a machineTrigger causes the 
+		"wallDestroyed" signal to be sent to the machineManager, which enters 
+		the "wallDestroyed" state.
+	4. The Ball Track - The ball that is nudged by the catapult rolls down a 
+		track, until it hits a button. This causes the "buttonPressed" signal
+		to be sent to the manager, which changes the state to "ButtonPressed",
+		this causes the rocket in stage 5 to move.
+	5. The Rocket - The rocket that is activated by the state transition travels
+		forward until it collides with a table. The table is then flipped, which
+		is the functionality of the Rube Goldberg Machine.
