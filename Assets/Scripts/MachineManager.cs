@@ -5,29 +5,38 @@ using System.Collections.Generic;
 public class MachineManager : MonoBehaviour {
 
     private List<MonoObserver> subscribers = new List<MonoObserver>();
-    private MachineFSM theFSM;
-
+    private static MachineFSM theFSM;
+    private static MachineManager instance;
+    private static GameObject theManager;
     public static MachineManager Instance
     {
-        get { return instance; }
+        get 
+        { 
+            if(instance == null)
+            {
+                theManager = new GameObject("Machine Manager");
+                theManager.AddComponent<MachineManager>();
+                theManager.AddComponent<MachineFSM>();
+                theFSM = theManager.GetComponent<MachineFSM>();
+                instance = theManager.GetComponent<MachineManager>();
+            }
+
+            return instance;
+        }
         set
         {
-            if (instance == null || instance == value)
+            if(instance == null)
             {
-                instance = value;
-            }
-            else
-            {
-                Destroy(value.gameObject);
+                instance = Instance;
             }
         }
     }
-    private static MachineManager instance;
+
+
 
     private void Awake()
     {
         instance = this;
-        theFSM = gameObject.GetComponent<MachineFSM>();
     }
 
     public void subscribe(MonoObserver obs)

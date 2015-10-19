@@ -7,6 +7,7 @@ public class CameraObserver : MonoObserver {
     private Transform [] targets, positions;
     private rubeState currentState;
     private float timeSinceTransition;
+    private AudioSource theSong;
 
     public override void receiveUpdate(rubeState theState)
     {
@@ -14,6 +15,11 @@ public class CameraObserver : MonoObserver {
         timeSinceTransition = 0f;
     }
 	
+    void Start()
+    {
+        base.Start();
+        theSong = gameObject.GetComponent<AudioSource>();
+    }
 	// Update is called once per frame
 	void Update () 
     {
@@ -21,6 +27,14 @@ public class CameraObserver : MonoObserver {
         {
             case rubeState.init:
             {
+                break;
+            }
+            case rubeState.started:
+            {
+                if (!theSong.isPlaying)
+                {
+                    theSong.Play();
+                }
                 transform.position = new Vector3(
                     transform.position.x,
                     targets[0].position.y,
@@ -60,6 +74,16 @@ public class CameraObserver : MonoObserver {
             {
                 transform.position = positions[2].position;
                 transform.rotation = positions[2].rotation;
+                break;
+            }
+            case rubeState.targetDestroyed:
+            {
+                if (timeSinceTransition < .5) break;
+
+                if (theSong.isPlaying)
+                {
+                    theSong.Stop();
+                }
                 break;
             }
         }

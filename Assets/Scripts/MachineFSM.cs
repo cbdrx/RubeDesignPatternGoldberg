@@ -10,6 +10,7 @@ using System.Collections.Generic;
 public enum rubeState
 {
     init = 0,
+    started,
     dominoStart,
     catapultFired,
     wallDestroyed,
@@ -44,6 +45,7 @@ public class MachineFSM : MonoBehaviour {
 	void Awake () 
     {
         stateList.Add(rubeState.init, new InitState());
+        stateList.Add(rubeState.started, new StartedState());
         stateList.Add(rubeState.dominoStart, new DominoState());
         stateList.Add(rubeState.catapultFired, new CatapultFired());
         stateList.Add(rubeState.wallDestroyed, new WallDestroyed());
@@ -87,12 +89,30 @@ public class MachineFSM : MonoBehaviour {
 
         public rubeState transition(triggerList message)
         {
+            if (message == triggerList.started)
+            {
+                return rubeState.started;
+            }
+
+            return rubeState.init;
+        }
+    }
+
+    private class StartedState : IState
+    {
+        public rubeState toEnum()
+        {
+            return rubeState.started;
+        }
+
+        public rubeState transition(triggerList message)
+        {
             if(message == triggerList.ballFell)
             {
                 return rubeState.dominoStart;
             }
 
-            return rubeState.init;
+            return rubeState.started;
         }
     }
 
