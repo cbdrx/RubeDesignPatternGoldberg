@@ -78,12 +78,6 @@ public class CameraObserver : MonoObserver {
             }
             case rubeState.targetDestroyed:
             {
-                if (timeSinceTransition < .5) break;
-
-                if (theSong.isPlaying)
-                {
-                    theSong.Stop();
-                }
                 break;
             }
         }

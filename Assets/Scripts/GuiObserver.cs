@@ -11,9 +11,16 @@ public class GuiObserver : MonoObserver {
 	/// <param name="theState">current state</param>
     public override void receiveUpdate(rubeState theState)
     {
-        if(theState != rubeState.init)
+        if(theState == rubeState.started)
         {
             gameObject.GetComponent<Text>().text = "";
+        }
+        else if (theState == rubeState.targetDestroyed)
+        {
+            gameObject.GetComponent<Text>().color = Color.black;
+            gameObject.GetComponent<Text>().fontSize = 80;
+            gameObject.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+            gameObject.GetComponent<Text>().text = @"(╯°□°）╯︵ ┻━┻)";
         }
         
     }

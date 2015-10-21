@@ -8,3 +8,6 @@ I certify that the code within the files of this project are entirely of my own
 creation.
 
 Press space to begin the machine's operation.
+Run in windowed mode at 4:3 or 16:9 aspect ratio.
+Close with the Window "X" when the machine has finished 
+    (described in Operations document)
