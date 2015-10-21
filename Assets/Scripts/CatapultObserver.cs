@@ -6,7 +6,11 @@ using System.Collections;
 /// </summary>
 public class CatapultObserver : MonoObserver {
 
-	// Use this for initialization
+	/// <summary>
+	/// Implements the receive update for the catapult, applying a force to 
+    /// the end of the lever. This causes the payload to be launched.
+	/// </summary>
+	/// <param name="theState">the state passed by the manager</param>
     public override void receiveUpdate(rubeState theState)
     {
         if(theState == rubeState.catapultFired)

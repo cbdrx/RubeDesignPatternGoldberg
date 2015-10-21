@@ -6,7 +6,12 @@ using System.Collections;
 /// </summary>
 public class MTObserver : MonoObserver {
 
-	// Use this for initialization
+	/// <summary>
+	/// Upon the ball hitting the ground, the rigidbody becomes no longer 
+    /// kinematic, so it can become the largest domino
+	/// </summary>
+	/// <param name="theState">the current state of the machien</param>
+    
     public override void receiveUpdate(rubeState theState)
     {
         if(theState == rubeState.dominoStart)

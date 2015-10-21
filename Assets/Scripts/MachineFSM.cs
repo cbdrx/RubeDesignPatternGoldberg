@@ -19,6 +19,7 @@ public enum rubeState
     targetDestroyed   
 }
 
+
 /// <summary>
 /// triggerList enumerates the "inputs" to the FSM, namely, the actions that
 /// can occur that cause the machine to transition.
@@ -36,12 +37,18 @@ public enum triggerList
 
 public class MachineFSM : MonoBehaviour {
 
-    
+    /// <summary>
+    /// This stores the current state of the machine
+    /// </summary>
     private IState currentState;
+
+    /// <summary>
+    /// Maps rubeStates to an IState object
+    /// </summary>
     private Dictionary<rubeState, IState> stateList =
         new Dictionary<rubeState, IState>();
 
-	// Use this for initialization
+	// Initializes the stateList
 	void Awake () 
     {
         stateList.Add(rubeState.init, new InitState());
@@ -57,31 +64,62 @@ public class MachineFSM : MonoBehaviour {
 
 	}
 	
-	// Update is called once per frame
+	/* Update is called once per frame
 	void Update () 
     {
         Debug.Log("Current State: " + currentState.toEnum().ToString());
-	}
+	}*/
 
+    /// <summary>
+    /// Acessor for the current state
+    /// </summary>
+    /// <returns>The rubeState representing the current state</returns>
     public rubeState getState()
     {
         return currentState.toEnum();
     }
 
+    /// <summary>
+    /// Handles input sent from the controller by using the state's
+    /// transition function.
+    /// </summary>
+    /// <param name="message">the trigger that the FSM should respond to
+    /// </param>
     public void handleTrigger(triggerList message)
     {
         currentState = stateList[currentState.transition(message)];
     }
     
+    /// <summary>
+    /// Interface for implementing the state classes. Each state's valid 
+    /// transitions are implemented in the transition function.
+    /// </summary>
     private interface IState
     {
+        /// <summary>
+        /// Returns the enum representing the state
+        /// </summary>
+        /// <returns>the enum representing the state</returns>
         rubeState toEnum();
 
+        /// <summary>
+        /// Handles the input and returns the enum representing the state to 
+        /// transition to
+        /// </summary>
+        /// <param name="message">The trigger the state should respond to
+        /// </param>
+        /// <returns>The rubeState enum that represents the state a valid 
+        /// transition leads to, OR the enum representing the current state
+        /// on an invalid transition.</returns>
         rubeState transition(triggerList message);
     }
 
     private class InitState : IState
     {
+        /// <summary>
+        /// Returns the enum representing the state
+        /// </summary>
+        /// <returns>the enum rubeState.init</returns>
         public rubeState toEnum()
         {
             return rubeState.init;
@@ -100,6 +138,10 @@ public class MachineFSM : MonoBehaviour {
 
     private class StartedState : IState
     {
+        /// <summary>
+        /// Returns the enum representing the state
+        /// </summary>
+        /// <returns>the enum rubeState.started</returns>
         public rubeState toEnum()
         {
             return rubeState.started;
@@ -118,6 +160,10 @@ public class MachineFSM : MonoBehaviour {
 
     private class DominoState : IState
     {
+        /// <summary>
+        /// Returns the enum representing the state
+        /// </summary>
+        /// <returns>the enum rubeState.dominoStart</returns>
         public rubeState toEnum()
         {
             return rubeState.dominoStart;
@@ -136,6 +182,10 @@ public class MachineFSM : MonoBehaviour {
 
     private class CatapultFired : IState
     {
+        /// <summary>
+        /// Returns the enum representing the state
+        /// </summary>
+        /// <returns>the enum rubeState.catapultFired</returns>
         public rubeState toEnum()
         {
             return rubeState.catapultFired;
@@ -154,6 +204,10 @@ public class MachineFSM : MonoBehaviour {
 
     private class WallDestroyed : IState
     {
+        /// <summary>
+        /// Returns the enum representing the state
+        /// </summary>
+        /// <returns>the enum rubeState.wallDestroyed</returns>
         public rubeState toEnum()
         {
             return rubeState.wallDestroyed;
@@ -172,6 +226,10 @@ public class MachineFSM : MonoBehaviour {
 
     public class ButtonPresed : IState
     {
+        /// <summary>
+        /// Returns the enum representing the state
+        /// </summary>
+        /// <returns>the enum rubeState.buttonPressed</returns>
         public rubeState toEnum()
         {
             return rubeState.buttonPressed;
@@ -189,6 +247,10 @@ public class MachineFSM : MonoBehaviour {
     }
     public class FinalCameraPos : IState
     {
+        /// <summary>
+        /// Returns the enum representing the state
+        /// </summary>
+        /// <returns>the enum rubeState.moveCameraToFinalPos</returns>
         public rubeState toEnum()
         {
             return rubeState.moveCameraToFinalPos;
@@ -206,6 +268,10 @@ public class MachineFSM : MonoBehaviour {
 
     public class TargetDestroyed : IState
     {
+        /// <summary>
+        /// Returns the enum representing the state
+        /// </summary>
+        /// <returns>the enum rubeState.targetDestroyed</returns>
         public rubeState toEnum()
         {
             return rubeState.targetDestroyed;

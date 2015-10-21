@@ -11,6 +11,11 @@ public class ButtonObserver : MonoObserver {
     [SerializeField]
     private rubeState targetState;
 
+    /// <summary>
+    /// This function makes the button look pressed if the targetState
+    /// is met.
+    /// </summary>
+    /// <param name="theState">the current state</param>
     public override void receiveUpdate(rubeState theState)
     {
         if (theState == targetState)
